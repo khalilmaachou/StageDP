@@ -27,9 +27,11 @@ def train_model(data_helper):
     rst_parser.action_clf.train(scipy.sparse.vstack(action_fvs), action_labels)
     # train relation classifier
     for level in [0, 1, 2]:
-        relation_fvs, relation_labels = list(zip(*data_helper.gen_relation_train_data(level)))
-        print('{} relation samples at level {}.'.format(len(relation_labels), level))
-        rst_parser.relation_clf.train(scipy.sparse.vstack(relation_fvs), relation_labels, level)
+        data_result = list(zip(*data_helper.gen_relation_train_data(level)))
+        if len(data_result) > 0:
+            relation_fvs, relation_labels = data_result
+            print('{} relation samples at level {}.'.format(len(relation_labels), level))
+            rst_parser.relation_clf.train(scipy.sparse.vstack(relation_fvs), relation_labels, level)
     rst_parser.save(model_dir='../data/model')
 
 
